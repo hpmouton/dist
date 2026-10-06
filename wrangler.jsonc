@@ -1,0 +1,20 @@
+{
+  "name": "themoutonmakiti",
+  "compatibility_date": "2026-10-07",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "makiti",
+      "database_id": "d86802b0-ea87-4002-b300-18c41d8cda77",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "main": "dist/_worker.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*"
+    ]
+  }
+}

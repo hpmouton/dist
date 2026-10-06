@@ -1,0 +1,7 @@
+{
+  "name": "patrick-michelle-wedding",
+  "private": true,
+  "type": "module",
+  "scripts": {"dev": "node dev-server.mjs", "test": "node tests/rsvp.test.mjs"},
+  "engines": {"node": ">=24"}
+}
