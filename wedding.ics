@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Patrick and Michelle//Wedding Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:patrick-michelle-20261211-wedding
+DTSTAMP:20261006T000000Z
+DTSTART:20261211T130000Z
+SUMMARY:Patrick & Michelle's Wedding
+LOCATION:Eden Chalets
+DESCRIPTION:Patrick Mouton and Michelle Everson's wedding.\n
+ Matrimony: 3:00-4:30 pm.\nPhotos and guest cocktails: 4:30-6:00 pm.\n
+ Reception and party: 6:00 pm onwards. All times Namibia (UTC+02:00).
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

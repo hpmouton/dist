@@ -1,0 +1,29 @@
+.attendants-grid.attendants-pair{grid-template-columns:repeat(2,minmax(0,340px));justify-content:center}
+.party-intro{text-align:center;background:var(--wine);color:var(--cream);position:relative;padding-top:85px;padding-bottom:65px}
+.party-intro:before{content:'';position:absolute;inset:20px;border:1px solid #b690594d;pointer-events:none}
+.party-intro .eyebrow{color:#dfbd8a}.party-intro h1{font-size:clamp(4rem,7.5vw,7.5rem);line-height:.98;letter-spacing:-.035em;margin:28px 0}.party-intro h1 em{color:#dfbd8a}.party-intro-copy{color:#e1cfd6;max-width:620px;margin:0 auto}
+.party-jump{display:flex;justify-content:center;gap:30px;margin-top:35px;flex-wrap:wrap}.party-jump a{border-bottom:1px solid #b6905970;font-size:.875rem;padding:4px 0;transition:border-color .3s}.party-jump a:hover{border-color:var(--cream)}
+.party-section-heading{text-align:center;margin-bottom:45px}.party-section-heading .eyebrow{color:#7c643d;margin-bottom:22px}.party-section-heading h2{font-size:clamp(3rem,4.7vw,4.6rem)}
+.couple-section{max-width:1320px;margin:auto;padding-top:90px;padding-bottom:80px}.couple-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:50px;max-width:1000px;margin:auto}.couple-card:nth-child(2){margin-top:55px}
+.person-card{min-width:0}.person-photo{position:relative;overflow:hidden;aspect-ratio:4/5;background:#eee7df;border:10px solid white;outline:1px solid var(--line)}.person-photo img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.2,.7,.2,1)}.groom-photo img{object-position:4% center}.bride-photo img{object-position:90% center}.person-card:hover .person-photo img{transform:scale(1.025)}
+.couple-card .person-photo{aspect-ratio:auto}
+.groom-photo img,.bride-photo img{height:auto;object-fit:contain;object-position:center}
+.couple-card:hover .person-photo img{transform:none}
+.portrait-glenwill img{object-position:50% 18%}
+.portrait-charles img,.portrait-jason img{object-position:50% 20%}
+.portrait-estee img{object-position:55% 50%}
+.portrait-nicole img{object-position:50% 12%}
+.portrait-chiara img{object-position:50% 20%}
+.portrait-cadence img{object-position:50% 25%}
+.portrait-ellenique img{object-position:50% 35%}
+.portrait-ipondoka img{object-position:50% 45%}
+.portrait-llewellyn img{object-position:50% 20%}
+.photo-role{position:absolute;bottom:16px;left:16px;color:var(--cream);background:#40202ee6;padding:7px 15px;font-size:.75rem;letter-spacing:.14em;backdrop-filter:blur(8px)}
+.person-caption{padding:25px 0 10px;text-align:center}.person-role{display:block;color:#7c643d;letter-spacing:.15em;text-transform:uppercase;font-size:.75rem;margin-bottom:10px}.person-caption h3{font-size:clamp(2rem,3vw,2.8rem);line-height:1.12}
+.attendants-section{padding-top:80px;padding-bottom:80px;background:#f3eee8;border-top:1px solid var(--line)}.bridal-section{background:var(--cream)}.attendants-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:40px;max-width:1120px;margin:auto}.attendants-grid:has(> :only-child){grid-template-columns:minmax(0,340px);justify-content:center}.portrait-pending{aspect-ratio:4/5;background:#e9e0d8;border:10px solid #fff;outline:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;text-align:center;color:#796143}.portrait-pending>span:last-child{font-size:.75rem;letter-spacing:.13em}.pending-initial{font:italic 3.5rem var(--serif);color:#96774f}.party-update-note{color:var(--muted);text-align:center;margin-top:30px;font-size:.875rem}.party-ending{text-align:center;padding:80px 7%;background:#eee7df}.party-ending h2{margin:25px 0 30px}
+.party-teaser{display:grid;grid-template-columns:1.2fr 1fr;align-items:center;gap:8%;border-top:1px solid var(--line)}.party-teaser .eyebrow{color:#7c643d;margin-bottom:20px}.party-teaser h2{font-size:clamp(3rem,4.3vw,4.5rem)}.party-teaser>div>p:not(.eyebrow){color:var(--muted);max-width:360px}.party-teaser .button{margin-top:25px}
+@media(max-width:1050px){.header nav{gap:.8rem}.header nav a{font-size:.8rem}.couple-grid{gap:30px}.attendants-grid{gap:25px}}
+@media(max-width:700px){.couple-grid{gap:22px}.person-photo{border-width:7px}.photo-role{font-size:.75rem;letter-spacing:.04em;left:8px;bottom:8px;padding:5px 8px}.attendants-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.party-teaser{grid-template-columns:1fr;gap:30px}}
+@media(max-width:600px){.party-intro{padding:55px 7% 45px}.party-intro:before{inset:12px}.party-intro h1{font-size:3.9rem}.party-intro-copy br{display:none}.party-jump{gap:10px 20px}.party-jump a{font-size:.875rem}.couple-section{padding:65px 8%}.couple-grid{grid-template-columns:1fr;max-width:380px;gap:38px}.couple-card:nth-child(2){margin-top:0}.person-photo{border-width:10px}.photo-role{left:14px;bottom:14px;letter-spacing:.12em;padding:7px 12px}.person-caption h3{font-size:2.6rem}.party-section-heading{margin-bottom:35px}.party-section-heading h2{font-size:3.1rem}.attendants-section{padding:60px 8%}.attendants-grid{grid-template-columns:1fr;max-width:360px;gap:38px}.party-ending{padding:65px 7%}.party-ending h2{font-size:3.5rem}}
+@media(max-width:600px){.attendants-grid.attendants-pair{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.person-card:hover .person-photo img{transform:none}}
