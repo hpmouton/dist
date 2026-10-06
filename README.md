@@ -41,7 +41,7 @@ There is no frontend build step. The deployment command is `npx wrangler deploy`
 - `dist/_worker.js`: server-side RSVP validation and D1 database access.
 - `dist/assets`: photographs and attire illustrations.
 
-The music player is currently removed. RSVP records live in the database, not in the public website files. There are no automated email notifications.
+Guest pages play the supplied `assets/audio/song.mp3` on repeat, with play/pause and volume controls. Browsers may require a tap before playback. A guest’s pause and volume choices are remembered; the organiser page has no music. RSVP records live in the database, not in the public website files. There are no automated email notifications.
 
 ## Preview locally
 

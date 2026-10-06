@@ -8,6 +8,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="design.css">
   <script src="script.js" defer></script>
+<script src="music.js" defer></script>
 </head>
 <body class="party-page">
   <a class="skip" href="#couple">Skip to wedding party</a>
@@ -87,5 +88,11 @@
     <section class="party-ending"><p class="eyebrow reveal">A day made sweeter, together</p><h2 class="reveal">Love surrounds <em>us.</em></h2><a class="button button-dark reveal" href="index.html">Back to the invitation</a></section>
   </main>
   <footer><p>Patrick & Michelle</p><span>11 DECEMBER 2026 · EDEN CHALETS</span><a href="index.html">The invitation</a></footer>
+<aside class="song-player" aria-label="Wedding music">
+<audio id="wedding-audio" src="assets/audio/song.mp3" loop preload="metadata"></audio>
+<button class="song-toggle" type="button" aria-label="Play wedding music"><span class="song-symbol" aria-hidden="true">♪</span><span class="song-label">Play music</span></button>
+<button class="song-settings" type="button" aria-label="Music volume and song details" aria-expanded="false" aria-controls="song-panel">♫</button>
+<div class="song-panel" id="song-panel" hidden><p class="eyebrow">Our song</p><p class="song-title">Why <span>Garth Taylor</span></p><label for="song-volume">Volume</label><input id="song-volume" type="range" min="0" max="100" value="35"><p class="song-status" role="status"></p></div>
+</aside>
 </body>
 </html>
