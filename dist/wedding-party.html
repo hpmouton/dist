@@ -9,6 +9,9 @@
   <link rel="stylesheet" href="design.css">
   <script src="script.js" defer></script>
 <script src="music.js" defer></script>
+<script src="rsvp.js" defer></script>
+<link rel="stylesheet" href="rsvp.css">
+<script src="navigation.js" defer></script>
 </head>
 <body class="party-page">
   <a class="skip" href="#couple">Skip to wedding party</a>
@@ -91,8 +94,8 @@
 <aside class="song-player" aria-label="Wedding music">
 <audio id="wedding-audio" src="assets/audio/song.mp3" loop preload="metadata"></audio>
 <button class="song-toggle" type="button" aria-label="Play wedding music"><span class="song-symbol" aria-hidden="true">♪</span><span class="song-label">Play music</span></button>
-<button class="song-settings" type="button" aria-label="Music volume and song details" aria-expanded="false" aria-controls="song-panel">♫</button>
-<div class="song-panel" id="song-panel" hidden><p class="eyebrow">Our song</p><p class="song-title">Why <span>Garth Taylor</span></p><label for="song-volume">Volume</label><input id="song-volume" type="range" min="0" max="100" value="35"><p class="song-status" role="status"></p></div>
+<button class="song-settings" type="button" aria-label="Music volume" aria-expanded="false" aria-controls="song-panel">♫</button>
+<div class="song-panel" id="song-panel" hidden><label for="song-volume">Volume</label><input id="song-volume" type="range" min="0" max="100" value="35"><p class="song-status" role="status"></p></div>
 </aside>
 </body>
 </html>

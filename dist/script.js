@@ -1,3 +1,8 @@
+window.initializeWeddingPage = () => {
+  window.disposeWeddingPage?.();
+  const lifecycle = new AbortController();
+  const {signal} = lifecycle;
+  const timers = [], observers = [];
 const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 // A compact, keyboard-accessible menu on phones and smaller screens.
@@ -27,11 +32,11 @@ if (menuButton && siteNavigation) {
   });
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') closeMenu(true);
-  });
+  }, {signal});
   document.addEventListener('click', event => {
     if (!event.target.closest('.header')) closeMenu();
-  });
-  smallScreen.addEventListener('change', updateMenu);
+  }, {signal});
+  smallScreen.addEventListener('change', updateMenu, {signal});
   updateMenu();
 }
 
@@ -44,7 +49,7 @@ function updateCountdown() {
   for (const [id, value] of Object.entries(values)) {
     const element = document.getElementById(id);
     const next = String(value).padStart(2, '0');
-    if (element.textContent !== next) {
+    if (element && element.textContent !== next) {
       const initial = element.textContent === '—';
       element.textContent = next;
       if (!initial && id !== 'seconds' && !motionPreference.matches) {
@@ -60,7 +65,7 @@ function updateCountdown() {
 }
 if (document.getElementById('days')) {
   updateCountdown();
-  setInterval(updateCountdown, 1000);
+  timers.push(setInterval(updateCountdown, 1000));
 }
 document.querySelector('.closing-monogram')?.classList.add('reveal');
 document.querySelectorAll('.attendants-grid, .couple-grid, .detail-grid, .attire-examples, .attire-guidance').forEach(group => {
@@ -85,7 +90,7 @@ function setupReveals() {
   document.querySelectorAll('.reveal:not(.visible)').forEach(element => revealObserver.observe(element));
   document.documentElement.classList.add('js-motion');
 }
-motionPreference.addEventListener('change', setupReveals);
+motionPreference.addEventListener('change', setupReveals, {signal});
 setupReveals();
 
 // Scripture is readable in full without JavaScript, and selectable with it.
@@ -116,9 +121,9 @@ function updateProgress() {
 }
 window.addEventListener('scroll', () => {
   if (!scrollScheduled) { scrollScheduled = true; requestAnimationFrame(updateProgress); }
-}, { passive: true });
-window.addEventListener('resize', updateProgress);
-window.addEventListener('load', updateProgress);
+}, { passive: true, signal });
+window.addEventListener('resize', updateProgress, {signal});
+window.addEventListener('load', updateProgress, {signal});
 updateProgress();
 if ('IntersectionObserver' in window) {
   const navigation = [...document.querySelectorAll('.header nav a[href^="#"]')];
@@ -130,6 +135,7 @@ if ('IntersectionObserver' in window) {
       });
     });
   }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+  observers.push(sectionObserver);
   navigation.forEach(link => {
     const section = document.querySelector(link.hash);
     if (section) sectionObserver.observe(section);
@@ -152,3 +158,10 @@ if (journeyMap) {
     buttons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   }));
 }
+
+  window.disposeWeddingPage = () => {
+    lifecycle.abort(); timers.forEach(clearInterval);
+    revealObserver?.disconnect(); observers.forEach(observer => observer.disconnect());
+  };
+};
+window.initializeWeddingPage();

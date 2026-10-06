@@ -1,4 +1,6 @@
-const $ = selector => document.querySelector(selector);
+window.initializeWeddingRSVP = () => {
+const pageRoot = document.querySelector('main');
+const $ = selector => pageRoot.querySelector(selector);
 let code = '', adminKey = '', households = [];
 const dateLabel = date => new Intl.DateTimeFormat('en-GB', {dateStyle:'long', timeZone:'Africa/Windhoek'}).format(new Date(date + 'T12:00:00+02:00'));
 async function api(path, data, authenticated = false) {
@@ -104,3 +106,6 @@ if ($('#admin-login')) {
     const url = URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'})); const a = node('a'); a.href = url; a.download = 'patrick-michelle-rsvps.csv'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1000);
   });
 }
+
+};
+window.initializeWeddingRSVP();

@@ -50,3 +50,6 @@ With Node.js 24 or later, run `npm run dev` from this folder, then open `http://
 ## Verification
 
 `npm test` checks the RSVP API against an isolated local SQLite database. The deployment configuration also passed a Cloudflare dry run. Follow Steps 7–9 of the setup guide to verify your actual hosted site before sending invitations.
+
+
+Music stays connected during navigation between guest pages on the hosted site or local HTTP server. Use `npm run dev` to preview this behaviour; direct `file:///` previews use normal page loads because browsers restrict fetching local files. Full browser reloads, external sites and the organiser page still start a new document.
