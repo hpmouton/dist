@@ -44,12 +44,14 @@ Use the **Workers** ZIP for this setup. Uploading just the ZIP file into your re
 3. Open `wrangler.jsonc` in your project and change only its `name` value if necessary:
 
 ```json
-"name": "patrick-michelle-wedding"
+"name": "themoutonmakiti"
 ```
 
-Replace `patrick-michelle-wedding` with your existing Worker's exact name. Keep the `main`, `assets` and `d1_databases` settings as supplied.
+Your deployment log confirms the Worker is named `themoutonmakiti`, which is now set in the configuration. Change it only if you choose a different Worker. Keep the `main`, `assets` and `d1_databases` settings as supplied.
 
 **Check:** the configured Worker name matches the existing Worker in Cloudflare. The database name remains `makiti`.
+
+The compatibility date is set to `2026-10-06`. Keep this value; it selects runtime behaviour and does not need to match today’s local date.
 
 ## 3. Correct the Cloudflare build settings
 
@@ -187,6 +189,7 @@ Use a real invited household whose response you can enter accurately, with their
 | What you see | What to check |
 | --- | --- |
 | “Uploading a Pages _worker.js file as an asset” | Steps 1–3: updated `wrangler.jsonc`, non-empty `dist/.assetsignore`, correct root directory, and deploy command `npx wrangler deploy`. Confirm the build uses your newest commit. |
+| “Can't set compatibility date in the future” | Set `compatibility_date` to `2026-10-06` in `wrangler.jsonc`, commit and push, then retry the updated build. |
 | Worker name mismatch | Match `name` in `wrangler.jsonc` to the existing Worker, then commit and push. |
 | “RSVP is not available just yet” | Check the live Worker has the `DB` binding to `makiti`. |
 | “We could not save or load your response” | Confirm all three tables exist in `makiti` from Step 4. If they do, inspect the Worker logs for the underlying database error. |
