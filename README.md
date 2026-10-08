@@ -53,3 +53,6 @@ With Node.js 24 or later, run `npm run dev` from this folder, then open `http://
 
 
 Music stays connected during navigation between guest pages on the hosted site or local HTTP server. Use `npm run dev` to preview this behaviour; direct `file:///` previews use normal page loads because browsers restrict fetching local files. Full browser reloads, external sites and the organiser page still start a new document.
+
+
+Dashboard: separate task views, filters, search, sorting and 12-household pagination; saved invitation codes with copy controls and restoration for older links. Programme: responsive vertical timeline with ceremony, cocktail/photo and celebration icons. Existing D1 tables support the changes without new SQL. Redeploy the updated Worker and website together.

@@ -163,7 +163,7 @@ Use the Worker's runtime **Variables and Secrets** section, not environment vari
 5. Immediately copy and save the personal invitation link shown below the form.
 6. Repeat for the other households.
 
-The original link is only displayed when created. If you lose it, **Generate replacement link** produces a new one and disables the old link without removing any saved replies.
+New invitation codes are saved and displayed on each household row in **Guest list**. Use **Copy code** or **Copy link** at any time. For older invitations, expand **Guest replies & invitation details**, paste a previously saved link or code, and select **Restore code**. This keeps the existing link valid. If you do not have it, **Replace invitation code** creates a new one and disables the old link without removing saved replies.
 
 Guests can open their personal link directly. Alternatively, the text after `#invite=` in that link is their invitation code for the RSVP page. Send each link privately to its household, since it allows access to that household's reply.
 
@@ -217,3 +217,8 @@ Local replies are saved in `.local/rsvp.sqlite`, separately from Cloudflare. Pre
 The Worker deployment dry run passed with `DB (makiti)` and `ASSETS`. Local tests covered saving and reloading replies, invitation isolation, deadlines, replacement links, failed-submission recovery, CSV downloads and mobile layouts. The live Cloudflare connection still needs the checks in Steps 7–9.
 
 For this workflow use **Workers** and `wrangler.jsonc`. The legacy `wrangler.pages.jsonc` is retained only for a separate Pages deployment and is not needed for these steps.
+
+
+## Dashboard update
+
+Use the **Guest list**, **Add invitation** and **Settings** views to keep tasks separate. Guest list shows 12 invitations per page, with search by guest, household or saved code; response/dietary filters; and name, latest reply or awaiting-reply sorting. Expand a household to see each guest’s reply, dietary notes and contact/message details. Each household shares one invitation code. New and restored codes are stored in the existing database and returned only to authenticated organisers; no additional database migration is required. CSV exports include all guests and omit invitation access codes.

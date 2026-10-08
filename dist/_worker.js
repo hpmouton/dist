@@ -78,7 +78,9 @@ export default {
       if (path === '/api/admin/list' && request.method === 'GET') {
         const {results: invitations} = await db.prepare('SELECT id, label, contact, message, updated_at FROM invitations ORDER BY label').all();
         const {results: guests} = await db.prepare('SELECT id, invitation_id, name, attending, dietary FROM guests ORDER BY rowid').all();
-        return json({invitations: invitations.map(i => ({...i, guests: guests.filter(g => g.invitation_id === i.id)})), deadline: await deadline(db)});
+        const {results: codes} = await db.prepare("SELECT key, value FROM settings WHERE key LIKE 'invitation_code:%'").all();
+        const savedCodes = new Map(codes.map(c => [c.key.slice('invitation_code:'.length), c.value]));
+        return json({invitations: invitations.map(i => ({...i, code: savedCodes.get(i.id) || null, guests: guests.filter(g => g.invitation_id === i.id)})), deadline: await deadline(db)});
       }
       if (path === '/api/admin/create' && request.method === 'POST') {
         const data = await body(request), label = field(data.label, 150, true);
@@ -86,14 +88,26 @@ export default {
         const names = data.names.map(n => field(n, 150, true)), id = crypto.randomUUID(), code = randomCode();
         await db.batch([
           db.prepare('INSERT INTO invitations (id,label,code_hash) VALUES (?,?,?)').bind(id, label, await hash(code)),
+          db.prepare('INSERT INTO settings (key,value) VALUES (?,?)').bind('invitation_code:' + id, code),
           ...names.map(name => db.prepare('INSERT INTO guests (id,invitation_id,name) VALUES (?,?,?)').bind(crypto.randomUUID(), id, name))
         ]);
         return json({id, code}, 201);
       }
       if (path === '/api/admin/reset-code' && request.method === 'POST') {
         const data = await body(request), id = field(data.id, 50, true), code = randomCode();
-        const result = await db.prepare('UPDATE invitations SET code_hash = ? WHERE id = ?').bind(await hash(code), id).run();
-        if (!result.meta.changes) fail('Invitation not found.', 404);
+        if (!await db.prepare('SELECT id FROM invitations WHERE id = ?').bind(id).first()) fail('Invitation not found.', 404);
+        await db.batch([
+          db.prepare('UPDATE invitations SET code_hash = ? WHERE id = ?').bind(await hash(code), id),
+          db.prepare('INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind('invitation_code:' + id, code)
+        ]);
+        return json({code});
+      }
+      if (path === '/api/admin/restore-code' && request.method === 'POST') {
+        const data = await body(request), id = field(data.id, 50, true);
+        const row = await invitation(db, data.code);
+        if (row.id !== id) fail('That code belongs to a different invitation.');
+        const code = data.code.trim().toLowerCase();
+        await db.prepare('INSERT INTO settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').bind('invitation_code:' + id, code).run();
         return json({code});
       }
       if (path === '/api/admin/deadline' && request.method === 'POST') {
