@@ -5,13 +5,17 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:patrick-michelle-20261211-wedding
-DTSTAMP:20261006T000000Z
-DTSTART:20261211T130000Z
+DTSTAMP:20261008T000000Z
+SEQUENCE:1
+DTSTART:20261211T123000Z
 SUMMARY:Patrick & Michelle's Wedding
-LOCATION:Eden Chalets
-DESCRIPTION:Patrick Mouton and Michelle Everson's wedding.\n
- Matrimony: 3:00-4:30 pm.\nPhotos and guest cocktails: 4:30-6:00 pm.\n
- Reception and party: 6:00 pm onwards. All times Namibia (UTC+02:00).
+LOCATION:Adam's Eden Chapel at Eden Chalets
+DESCRIPTION:Patrick Mouton and Michelle Everson's wedding.\n14:30 - Groom 
+ and guests gather at Adam's Eden Chapel.\n14:45 - Holy matrimony.\n16:00 
+ - Confetti and photographs.\n16:30 - Guest cocktail hour at Eden Chalets.
+ \n16:30 - Wedding party shoot.\n17:45 - Wedding party joins cocktail hour
+ .\n18:00 onwards - Reception and party at Eden Chalets.\nAll times Namibi
+ a (UTC+02:00).
 STATUS:CONFIRMED
 TRANSP:TRANSPARENT
 END:VEVENT

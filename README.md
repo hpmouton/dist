@@ -56,3 +56,6 @@ Music stays connected during navigation between guest pages on the hosted site o
 
 
 Dashboard: separate task views, filters, search, sorting and 12-household pagination; saved invitation codes with copy controls and restoration for older links. Programme: responsive vertical timeline with ceremony, cocktail/photo and celebration icons. Existing D1 tables support the changes without new SQL. Redeploy the updated Worker and website together.
+
+
+Updated programme: 14:30 groom/guest gathering at Adam’s Eden Chapel, 14:45 ceremony, 16:00 confetti/photos, separate 16:30 cocktail hour and wedding-party-shoot entries, 17:45 wedding party joins cocktail hour, 18:00 reception onwards. Calendar starts at gathering (12:30 UTC); countdown ends at ceremony (12:45 UTC). Chapel is a venue facility at Eden Chalets, confirmed by https://edenchalets.com/venue/.

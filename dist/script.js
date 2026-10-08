@@ -40,8 +40,8 @@ if (menuButton && siteNavigation) {
   updateMenu();
 }
 
-// Count down to the start of holy matrimony at 3 pm, Namibia time.
-const weddingDate = new Date('2026-12-11T15:00:00+02:00').getTime();
+// Count down to the start of holy matrimony at 14:45, Namibia time.
+const weddingDate = new Date('2026-12-11T14:45:00+02:00').getTime();
 function updateCountdown() {
   const remaining = Math.max(0, weddingDate - Date.now());
   const totalSeconds = Math.floor(remaining / 1000);
