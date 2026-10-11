@@ -62,3 +62,8 @@
 
 /* Closing toast, from the couple's original GB-145 engagement photograph. */
 .closing-with-photo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:7%;align-items:center;text-align:left;padding-top:75px;padding-bottom:75px}.closing-photo{margin:0;overflow:hidden;background:#e6ddd0}.closing-photo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:center 73%}.closing-with-photo h2{font-size:clamp(3.3rem,5.5vw,6rem);line-height:1.08;letter-spacing:-.05em}.closing-copy>p:not(.eyebrow){font-size:1rem;color:var(--muted)}.closing-copy .eyebrow{line-height:1.8}.closing-with-photo .closing-monogram{margin-top:30px}@media(max-width:760px){.closing-with-photo{grid-template-columns:1fr;gap:40px;padding-top:45px;padding-bottom:60px;text-align:center}.closing-photo{width:100%;max-width:520px;margin:auto}.closing-with-photo h2{font-size:clamp(3.2rem,9vw,4.8rem)}.closing-copy>p:not(.eyebrow){font-size:.95rem}}
+
+/* Studio portraits are already composed to the card's 4:5 frame. */
+.person-photo img.studio-portrait{object-position:center;object-fit:cover}
+#groomsmen .portrait-pending{background:#ded4c6}
+
