@@ -59,3 +59,12 @@ Dashboard: separate task views, filters, search, sorting and 12-household pagina
 
 
 Updated programme: 14:30 groom/guest gathering at Adam’s Eden Chapel, 14:45 ceremony, 16:00 confetti/photos, separate 16:30 cocktail hour and wedding-party-shoot entries, 17:45 wedding party joins cocktail hour, 18:00 reception onwards. Calendar starts at gathering (12:30 UTC); countdown ends at ceremony (12:45 UTC). Chapel is a venue facility at Eden Chalets, confirmed by https://edenchalets.com/venue/.
+
+
+Programme booklet: the organiser dashboard’s **Programme booklet** view previews and downloads the eight-page A5 PDF, plus an A4 landscape version already imposed for folding. Booklet files are under `dist/assets/programme` relative to this project root. They contain public wedding details only. Regenerate them when details change using the source generator in the parent workspace (`build_programme.py`); the export is a prepared PDF, not an automatic screenshot of the admin page. For folded printing use two-sided A4 landscape, flip short edge, actual size; do not apply a second booklet-imposition setting.
+
+
+Latest booklet revision: sixteen A5 pages, with a different full-page engagement photo on every even-numbered page; no dress code. The day timeline remains on one page. Ceremony and reception order pages are clearly marked as DRAFT until their sequence is confirmed in `programme-orders.json` in the parent workspace. A thank-you page closes the written programme. A4 folded printing now uses four sheets (eight printed sides).
+
+
+Schedule revision (11 October 2026): guest arrival from 14:30; groom and groomsmen enter 15:00; ceremony 15:05; confetti/photos 16:00; guest cocktails 16:45; wedding party photoshoot 17:00; reception from 19:00. Website timeline, arrival notes, countdown, calendar and both programme PDFs reflect this schedule.

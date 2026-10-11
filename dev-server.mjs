@@ -25,7 +25,7 @@ export async function startServer({port=4173, memory=false, key='local-preview-o
     let path=decodeURIComponent(new URL(request.url).pathname); if(path==='/')path='/index.html';
     if(!extname(path))path+='.html'; const file=resolve(dist,'.'+path);
     if(!file.startsWith(dist+sep)||path.startsWith('/_'))return new Response('Not found',{status:404});
-    try {return new Response(await readFile(file),{headers:{'Content-Type':({'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml'})[extname(file)]||'application/octet-stream'}});}catch{return new Response('Not found',{status:404});}
+    try {return new Response(await readFile(file),{headers:{'Content-Type':({'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/javascript','.jpg':'image/jpeg','.jpeg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml','.pdf':'application/pdf'})[extname(file)]||'application/octet-stream'}});}catch{return new Response('Not found',{status:404});}
   }}};
   const server=createServer(async(req,res)=>{
     try {
