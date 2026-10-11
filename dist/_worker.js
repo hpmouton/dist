@@ -93,6 +93,41 @@ export default {
         ]);
         return json({id, code}, 201);
       }
+      if (path === '/api/admin/update' && request.method === 'POST') {
+        const data = await body(request), id = field(data.id, 50, true);
+        if (!await db.prepare('SELECT id FROM invitations WHERE id = ?').bind(id).first()) fail('Invitation not found. It may have been deleted.', 404);
+        const label = field(data.label, 150, true), contact = field(data.contact ?? '', 200), message = field(data.message ?? '', 1000);
+        if (!Array.isArray(data.guests) || !data.guests.length || data.guests.length > 30) fail('Keep between 1 and 30 guests on an invitation. To remove everyone, delete the invitation.');
+        const {results: existing} = await db.prepare('SELECT id FROM guests WHERE invitation_id = ?').bind(id).all();
+        const seen = new Set();
+        const guests = data.guests.map(g => {
+          if (!g || typeof g !== 'object' || !['pending','yes','no'].includes(g.attending)) fail('Please choose a valid response for each guest.');
+          const guestId = g.id == null ? crypto.randomUUID() : field(g.id, 50, true);
+          if (seen.has(guestId) || (g.id != null && !existing.some(e => e.id === guestId))) fail('The guest list has changed. Close the editor and refresh before trying again.');
+          seen.add(guestId);
+          const name = field(g.name, 150, true), dietary = field(g.dietary ?? '', 500);
+          return {id:guestId, name, attending:g.attending, dietary:g.attending === 'yes' ? dietary : '', isNew:g.id == null};
+        });
+        const updatedAt = new Date().toISOString();
+        await db.batch([
+          ...existing.filter(g => !seen.has(g.id)).map(g => db.prepare('DELETE FROM guests WHERE id = ? AND invitation_id = ?').bind(g.id, id)),
+          ...guests.map(g => g.isNew
+            ? db.prepare('INSERT INTO guests (id,invitation_id,name,attending,dietary) VALUES (?,?,?,?,?)').bind(g.id,id,g.name,g.attending,g.dietary)
+            : db.prepare('UPDATE guests SET name = ?, attending = ?, dietary = ? WHERE id = ? AND invitation_id = ?').bind(g.name,g.attending,g.dietary,g.id,id)),
+          db.prepare('UPDATE invitations SET label = ?, contact = ?, message = ?, updated_at = ? WHERE id = ?').bind(label,contact,message,updatedAt,id)
+        ]);
+        return json({ok:true, updatedAt});
+      }
+      if (path === '/api/admin/delete' && request.method === 'POST') {
+        const data = await body(request), id = field(data.id, 50, true);
+        if (!await db.prepare('SELECT id FROM invitations WHERE id = ?').bind(id).first()) fail('Invitation not found. It may already have been deleted.', 404);
+        await db.batch([
+          db.prepare('DELETE FROM settings WHERE key = ?').bind('invitation_code:' + id),
+          db.prepare('DELETE FROM guests WHERE invitation_id = ?').bind(id),
+          db.prepare('DELETE FROM invitations WHERE id = ?').bind(id)
+        ]);
+        return json({ok:true});
+      }
       if (path === '/api/admin/reset-code' && request.method === 'POST') {
         const data = await body(request), id = field(data.id, 50, true), code = randomCode();
         if (!await db.prepare('SELECT id FROM invitations WHERE id = ?').bind(id).first()) fail('Invitation not found.', 404);

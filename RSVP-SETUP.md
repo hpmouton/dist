@@ -222,3 +222,16 @@ For this workflow use **Workers** and `wrangler.jsonc`. The legacy `wrangler.pag
 ## Dashboard update
 
 Use the **Guest list**, **Add invitation** and **Settings** views to keep tasks separate. Guest list shows 12 invitations per page, with search by guest, household or saved code; response/dietary filters; and name, latest reply or awaiting-reply sorting. Expand a household to see each guest’s reply, dietary notes and contact/message details. Each household shares one invitation code. New and restored codes are stored in the existing database and returned only to authenticated organisers; no additional database migration is required. CSV exports include all guests and omit invitation access codes.
+
+## Edit or delete invitations and RSVPs
+
+In the organiser dashboard, open **Guest list** and select **Edit RSVP** on a household's row.
+
+- Correct the household name, guest names, contact details and message, or change attendance and dietary notes.
+- Choose **Awaiting reply** to reset a guest's answer. Dietary notes are kept only for guests marked **Attending**.
+- Use **Add guest** or **Remove guest**, then **Save changes**. An invitation must retain at least one guest and can contain up to 30.
+- The existing invitation code and personal link stay valid after edits. Organisers can make corrections after the RSVP closing date.
+- **Cancel** leaves stored records unchanged. Unsaved edits prompt before closing, and a failed save leaves the draft available to retry.
+- To remove the whole household, use **Delete invitation & RSVPs** at the bottom of the editor and confirm. This permanently deletes all its guests and replies, removes the saved code and disables its invitation link.
+
+This update needs no database migration or new settings. Deploy the updated site and Worker together using the existing deployment instructions. Editing and deletion require the hosted website or the local development server; opening admin.html directly as a file cannot save data.
