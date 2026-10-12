@@ -241,7 +241,7 @@ if ($('#admin-login')) {
   $('#refresh-guests').addEventListener('click',async()=>{try{await refresh();status($('#admin-status'),'Guest list updated.',true);}catch(error){status($('#admin-status'),error.message);}});
   $('#export-guests').addEventListener('click',async()=>{
     try{await refresh();}catch(error){status($('#admin-status'),error.message);return;}
-    const rows=[['Household','Guest','Response','Dietary requirements','Contact','Message','Last updated'],...households.flatMap(i=>i.guests.map(g=>[i.label,g.name,guestStatus[g.attending],g.dietary,i.contact,i.message,i.updated_at||'']))];
+    const rows=[['Household','Guest','Response','Dietary requirements','Contact','Message','Last updated','Invitation link'],...households.flatMap(i=>i.guests.map(g=>[i.label,g.name,guestStatus[g.attending],g.dietary,i.contact,i.message,i.updated_at||'',i.code?linkFor(i.code):'']))];
     const cell=value=>{let text=String(value);if(/^[\s]*[=+@-]/.test(text))text="'"+text;return '"'+text.replaceAll('"','""')+'"';};
     const url=URL.createObjectURL(new Blob(['\uFEFF'+rows.map(r=>r.map(cell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));const a=node('a');a.href=url;a.download='patrick-michelle-rsvps.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   });
