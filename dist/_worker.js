@@ -64,14 +64,19 @@ export default {
         const data = await body(request), row = await invitation(db, data.code);
         if (isClosed(await deadline(db))) fail('The RSVP deadline has passed. Please contact Patrick or Michelle about changes.', 403);
         const {results: guests} = await db.prepare('SELECT id FROM guests WHERE invitation_id = ?').bind(row.id).all();
-        if (!Array.isArray(data.guests) || data.guests.length !== guests.length || new Set(data.guests.map(g => g?.id)).size !== guests.length) fail('Please reply for everyone on your invitation.');
+        const hasContact = Object.hasOwn(data, 'contact'), hasMessage = Object.hasOwn(data, 'message');
+        if (!Array.isArray(data.guests) || data.guests.length > guests.length || new Set(data.guests.map(g => g?.id)).size !== data.guests.length || (!data.guests.length && !hasContact && !hasMessage)) fail('Please choose a guest to reply for or update your invitation notes.');
         const statements = data.guests.map(g => {
-          if (!g || !guests.some(x => x.id === g.id) || !['yes','no'].includes(g.attending)) fail('Please choose an answer for each invited guest.');
+          if (!g || !guests.some(x => x.id === g.id) || !['yes','no'].includes(g.attending)) fail('Please choose an answer for each guest you are replying for.');
           const dietary = field(g.dietary ?? '', 500);
           return db.prepare('UPDATE guests SET attending = ?, dietary = ? WHERE id = ? AND invitation_id = ?').bind(g.attending, g.attending === 'yes' ? dietary : '', g.id, row.id);
         });
         const updatedAt = new Date().toISOString();
-        statements.push(db.prepare('UPDATE invitations SET contact = ?, message = ?, updated_at = ? WHERE id = ?').bind(field(data.contact ?? '', 200), field(data.message ?? '', 1000), updatedAt, row.id));
+        // Update only submitted fields: another guest may have replied since this page opened.
+        const columns = ['updated_at = ?'], values = [updatedAt];
+        if (hasContact) { columns.push('contact = ?'); values.push(field(data.contact, 200)); }
+        if (hasMessage) { columns.push('message = ?'); values.push(field(data.message, 1000)); }
+        statements.push(db.prepare('UPDATE invitations SET ' + columns.join(', ') + ' WHERE id = ?').bind(...values, row.id));
         await db.batch(statements);
         return json({ok: true, updatedAt});
       }

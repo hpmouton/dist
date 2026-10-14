@@ -68,3 +68,6 @@ Latest booklet revision: sixteen A5 pages, with a different full-page engagement
 
 
 Schedule revision (11 October 2026): guest arrival from 14:30; groom and groomsmen enter 15:00; ceremony 15:05; confetti/photos 16:00; guest cocktails 16:45; wedding party photoshoot 17:00; reception from 19:00. Website timeline, arrival notes, countdown, calendar and both programme PDFs reflect this schedule.
+
+
+Individual RSVP replies: each guest on a shared invitation now saves their attendance and dietary notes independently. Unanswered guests remain pending; saving from an older open page does not overwrite another guest’s reply. Shared contact/message notes have their own save action. Redeploy the updated site and Worker together; existing links and database tables need no changes.

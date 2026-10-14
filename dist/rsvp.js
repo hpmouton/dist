@@ -19,15 +19,34 @@ async function busy(form, action, message) {
 }
 function node(tag, text, className) { const el = document.createElement(tag); if (text !== undefined) el.textContent = text; if (className) el.className = className; return el; }
 if ($('#invite-lookup')) {
-  const lookup = $('#invite-lookup'), responseForm = $('#response-form');
+  const lookup = $('#invite-lookup'), notesForm = $('#invitation-notes-form');
+  let sharedNotes = {contact:'',message:''}, pendingSaves = 0;
+  async function saveForm(form, feedback, action) {
+    const controls = [...form.querySelectorAll('input,select,textarea,button')].map(el => [el, el.disabled]);
+    controls.forEach(([el]) => { el.disabled = true; });
+    pendingSaves++; $('#change-invitation').disabled = true; status(feedback, 'Saving…');
+    try { await action(); }
+    catch (error) { status(feedback, error.message); }
+    finally {
+      controls.forEach(([el, disabled]) => { el.disabled = disabled; });
+      pendingSaves--; $('#change-invitation').disabled = pendingSaves > 0;
+    }
+  }
   function showInvitation(invite) {
     $('#lookup-panel').hidden = true; $('#response-panel').hidden = false;
     $('#household-title').textContent = invite.label;
     $('#deadline-note').textContent = invite.deadline ? 'Please reply by ' + dateLabel(invite.deadline) + '.' : '';
     $('#guest-fields').replaceChildren();
     for (const guest of invite.guests) {
+      const form = node('form', undefined, 'rsvp-form guest-response-form'); form.dataset.id = guest.id;
       const fieldset = node('fieldset'); fieldset.dataset.id = guest.id;
       fieldset.append(node('legend', guest.name)); const fields = node('div', undefined, 'guest-fields');
+      const savedState = node('span');
+      const showSavedState = value => {
+        savedState.className = 'status-badge status-' + value;
+        savedState.textContent = {pending:'Awaiting reply',yes:'Saved · Attending',no:'Saved · Declined'}[value];
+      };
+      showSavedState(guest.attending);
       const label = node('label', 'Will you be joining us?'); const select = node('select');
       select.id = 'attendance-' + guest.id; label.htmlFor = select.id; select.required = true;
       for (const [value, text] of [['','Please choose'],['yes','Joyfully accepts'],['no','Regretfully declines']]) { const option = node('option', text); option.value = value; select.append(option); }
@@ -35,22 +54,44 @@ if ($('#invite-lookup')) {
       const dietaryWrap = node('div'); const dietaryLabel = node('label','Dietary requirements or allergies (optional)');
       const dietary = node('textarea'); dietary.id = 'dietary-' + guest.id; dietaryLabel.htmlFor = dietary.id; dietary.rows = 2; dietary.maxLength = 500; dietary.value = guest.dietary; dietary.disabled = invite.closed;
       dietaryWrap.append(dietaryLabel, dietary); const update = () => { dietaryWrap.hidden = select.value !== 'yes'; }; select.addEventListener('change', update); update();
-      fields.append(label, select, dietaryWrap); fieldset.append(fields); $('#guest-fields').append(fieldset);
+      const save = node('button', guest.attending === 'pending' ? 'Send my reply' : 'Update my reply', 'button button-dark');
+      save.type = 'submit'; save.hidden = invite.closed; save.setAttribute('aria-label', 'Save reply for ' + guest.name);
+      const feedback = node('p', undefined, 'form-status'); feedback.setAttribute('role', 'status');
+      fields.append(label, select, dietaryWrap); fieldset.append(savedState, fields);
+      form.append(fieldset, save, feedback); $('#guest-fields').append(form);
+      form.addEventListener('input', () => { $('#confirmation').hidden = true; status(feedback, 'You have unsaved changes. Send your reply to save them.'); });
+      form.addEventListener('submit', event => {
+        event.preventDefault(); if (invite.closed) return;
+        const reply = {id:guest.id, attending:select.value, dietary:dietary.value};
+        saveForm(form, feedback, async () => {
+          await api('rsvp', {code, guests:[reply]});
+          if (reply.attending === 'no') dietary.value = '';
+          showSavedState(reply.attending); save.textContent = 'Update my reply';
+          status(feedback, 'Reply saved for ' + guest.name + '.', true);
+          $('#confirmation').hidden = false;
+          $('#confirmation-copy').textContent = 'Thank you, ' + guest.name + '. Your reply is saved. ' + (reply.attending === 'yes' ? 'We can’t wait to celebrate with you.' : 'Thank you for letting us know. You’ll be with us in spirit.');
+        });
+      });
     }
     $('#guest-contact').value = invite.contact; $('#guest-message').value = invite.message;
+    sharedNotes = {contact:invite.contact, message:invite.message}; status($('#notes-status'), '');
     $('#guest-contact').disabled = invite.closed; $('#guest-message').disabled = invite.closed;
-    $('#save-response').hidden = invite.closed;
-    status($('#response-status'), invite.closed ? 'The RSVP deadline has passed. Please contact Patrick or Michelle about any changes.' : invite.updatedAt ? 'Your previous response is saved. You can update it below.' : '', !!invite.updatedAt && !invite.closed);
+    $('#save-notes').hidden = invite.closed; $('#confirmation').hidden = true;
+    status($('#response-status'), invite.closed ? 'The RSVP deadline has passed. Please contact Patrick or Michelle about any changes.' : '');
     $('#household-title').focus();
   }
   lookup.addEventListener('submit', event => { event.preventDefault(); busy(lookup, async () => { code = $('#invitation-code').value.trim(); showInvitation(await api('invitation', {code})); }, $('#lookup-status')); });
-  responseForm.addEventListener('input', () => { $('#confirmation').hidden = true; status($('#response-status'), 'You have unsaved changes. Send your reply to save them.'); });
-  responseForm.addEventListener('submit', event => { event.preventDefault(); busy(responseForm, async () => {
-    const guests = [...$('#guest-fields').children].map(el => ({id:el.dataset.id, attending:el.querySelector('select').value, dietary:el.querySelector('textarea').value}));
-    await api('rsvp', {code, guests, contact:$('#guest-contact').value, message:$('#guest-message').value});
-    $('#confirmation').hidden = false; $('#confirmation-copy').textContent = guests.some(g => g.attending === 'yes') ? 'Your response has been saved. We can’t wait to celebrate with you.' : 'Your response has been saved. Thank you for letting us know. You’ll be with us in spirit.';
-    $('#confirmation').focus(); status($('#response-status'), 'Response saved successfully.', true);
-  }, $('#response-status')); });
+  notesForm.addEventListener('input', () => status($('#notes-status'), 'You have unsaved invitation notes.'));
+  notesForm.addEventListener('submit', event => {
+    event.preventDefault(); if ($('#save-notes').hidden) return;
+    const changes = {};
+    for (const name of ['contact','message']) if ($('#guest-' + name).value !== sharedNotes[name]) changes[name] = $('#guest-' + name).value;
+    if (!Object.keys(changes).length) { status($('#notes-status'), 'No changes to save.', true); return; }
+    saveForm(notesForm, $('#notes-status'), async () => {
+      await api('rsvp', {code, guests:[], ...changes});
+      Object.assign(sharedNotes, changes); status($('#notes-status'), 'Invitation notes saved. Guest replies are unchanged.', true);
+    });
+  });
   $('#change-invitation').addEventListener('click', () => { code = ''; $('#invitation-code').value = ''; $('#response-panel').hidden = true; $('#confirmation').hidden = true; $('#lookup-panel').hidden = false; $('#invitation-code').focus(); });
   const fragment = new URLSearchParams(location.hash.slice(1));
   if (fragment.has('invite')) { $('#invitation-code').value = fragment.get('invite'); history.replaceState(null, '', location.pathname + location.search); lookup.requestSubmit(); }

@@ -20,11 +20,13 @@ try {
  const other=(await api('invitation',{code:b.body.code})).body;
  const guests=invite.guests.map((g,i)=>({id:g.id,attending:i?'no':'yes',dietary:'Vegetarian'}));
  const payload={code:a.body.code,guests,contact:'test@example.test',message:'Looking forward to it'};
- assert.equal((await api('rsvp',{...payload,guests:[guests[0]]})).status,400);
+ assert.equal((await api('rsvp',{code:a.body.code,guests:[]})).status,400);
  assert.equal((await api('rsvp',{...payload,guests:[guests[0],guests[0]]})).status,400);
  assert.equal((await api('rsvp',{...payload,guests:[guests[0],{...guests[1],id:other.guests[0].id}]})).status,400);
  assert.equal((await api('rsvp',{...payload,contact:'x'.repeat(201)})).status,400);
  assert.equal((await api('invitation',{code:a.body.code})).body.guests[0].attending,'pending');
+ assert.equal((await api('rsvp',{code:a.body.code,guests:[guests[0]]})).status,200);
+ assert.equal((await api('invitation',{code:a.body.code})).body.guests[1].attending,'pending');
  assert.equal((await api('rsvp',payload)).status,200);
  let saved=(await api('invitation',{code:a.body.code})).body;
  assert.equal(saved.contact,payload.contact);assert.equal(saved.guests[0].dietary,'Vegetarian');assert.equal(saved.guests[1].dietary,'');assert.ok(saved.updatedAt);

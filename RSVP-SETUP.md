@@ -171,14 +171,14 @@ Guests can open their personal link directly. Alternatively, the text after `#in
 
 ## 9. Test one real invitation before sharing the site
 
-Use a real invited household whose response you can enter accurately, with their agreement. There is no delete button for disposable test households in the current dashboard.
+Create a temporary test household with at least two guests. You can remove it afterwards with **Edit RSVP → Delete invitation & RSVPs**.
 
 1. Copy that household's invitation link.
 2. Open it in a separate private/incognito browser window.
 3. Check that only that household's invited names appear.
-4. Choose accept or decline for each guest and add a dietary note if relevant.
-5. Select **Send our reply** and wait for the saved confirmation.
-6. Close that window, open the same link again and check that the reply is still there.
+4. Choose accept or decline for just one guest and add a dietary note if relevant. Leave the other guest unanswered.
+5. Select **Send my reply** beneath that guest and wait for their saved confirmation.
+6. Open the same link in a second browser window. Check that the first reply is saved, then submit the second guest’s reply. Confirm that the first reply stays unchanged.
 7. Return to the organiser dashboard and select **Refresh**.
 8. Check the attending/declined counts and select **Download spreadsheet (CSV)** to verify the exported response.
 
@@ -221,7 +221,7 @@ For this workflow use **Workers** and `wrangler.jsonc`. The legacy `wrangler.pag
 
 ## Dashboard update
 
-Use the **Guest list**, **Add invitation** and **Settings** views to keep tasks separate. Guest list shows 12 invitations per page, with search by guest, household or saved code; response/dietary filters; and name, latest reply or awaiting-reply sorting. Expand a household to see each guest’s reply, dietary notes and contact/message details. Each household shares one invitation code. New and restored codes are stored in the existing database and returned only to authenticated organisers; no additional database migration is required. CSV exports include all guests and omit invitation access codes.
+Use the **Guest list**, **Add invitation** and **Settings** views to keep tasks separate. Guest list shows 12 invitations per page, with search by guest, household or saved code; response/dietary filters; and name, latest reply or awaiting-reply sorting. Expand a household to see each guest’s reply, dietary notes and contact/message details. Each household shares one invitation code. New and restored codes are stored in the existing database and returned only to authenticated organisers; no additional database migration is required. CSV exports include all guests and their household invitation link. Keep the export private, since these links grant access to the invitation.
 
 ## Edit or delete invitations and RSVPs
 
@@ -235,3 +235,12 @@ In the organiser dashboard, open **Guest list** and select **Edit RSVP** on a ho
 - To remove the whole household, use **Delete invitation & RSVPs** at the bottom of the editor and confirm. This permanently deletes all its guests and replies, removes the saved code and disables its invitation link.
 
 This update needs no database migration or new settings. Deploy the updated site and Worker together using the existing deployment instructions. Editing and deletion require the hosted website or the local development server; opening admin.html directly as a file cannot save data.
+
+
+## Individual replies on a shared invitation
+
+Each guest has their own **Send my reply** / **Update my reply** button and saved status. They can respond at different times through the existing household link. Saving one person updates only that person’s attendance and dietary requirements; unanswered guests remain **Awaiting reply**.
+
+Optional contact details and the invitation message are shared household information, under **Contact details & invitation notes**, with their own save button. Saving a guest reply does not replace these notes. The RSVP closing date applies to individual replies and shared notes.
+
+Deploy the updated website files and Worker together. Existing links, saved replies, dashboard totals and CSV exports continue to work; no database migration or new invitation codes are needed.
